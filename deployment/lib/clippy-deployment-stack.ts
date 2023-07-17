@@ -13,11 +13,20 @@ export class ClippyDeployment extends Stack {
       runtime: Runtime.NODEJS_18_X,
       entry: '../clippy-ts/app.ts',
       handler: 'lambdaHandler',
-      bundling: {
-        charset: Charset.UTF8,
-        format: OutputFormat.ESM,
-        target: "node18"
+      environment: {
+        PUBLIC_DISCORD_KEY: ''
       }
+      // bundling: {
+      //   charset: Charset.UTF8,
+      //   format: OutputFormat.ESM,
+      //   mainFields: ["module", "main"],
+      //   target: "node16.5",
+      //   esbuildArgs: {
+      //     "--conditions": "module",
+      //   }
+      // }
     });
   }
 }
+
+
