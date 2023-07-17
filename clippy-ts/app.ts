@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
+import nacl from 'tweetnacl';
 
 /**
  *
@@ -26,8 +27,13 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent) => {
         const signature = event.headers['x-signature-ed25519']
         const timestamp = event.headers['x-signature-timestamp']
         if (signature && timestamp && publicKey) {
-            const isValidRequest = verifyKey(event.body, signature, timestamp, publicKey);
-            if (isValidRequest) {
+            // saving 50ms not using discord's variant:
+            const isVerified = nacl.sign.detached.verify(
+                Buffer.from(timestamp + event.body),
+                Buffer.from(signature, 'hex'),
+                Buffer.from(publicKey, 'hex')
+              );
+            if (isVerified) {
 
                 try {
                     let incomingCommand: IncomingInteraction = JSON.parse(event.body);
