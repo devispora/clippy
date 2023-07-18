@@ -73,5 +73,14 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent) => {
         };
 
     }
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: 'Hi there with your stuff',
+            }
+        }),
+    };
 
 };
