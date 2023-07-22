@@ -9,7 +9,7 @@ const DEPLOY_COMMANDS = process.env.DEPLOY_COMMANDS;
 
 async function dropSteveCommands(jsonData: object) {
     const response = await fetch(`https://discord.com/api/v10/applications/${DISCORD_APP_ID}/commands`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${BEARER_TOKEN}`
@@ -21,7 +21,7 @@ async function dropSteveCommands(jsonData: object) {
 }
 
 export function RegisterCommands(top10Commands: StringCommand[]) {
-    const defaultCommands = [{
+    const nonQuoteCommands = [{
         "name": "listquotes",
         "type": 1,
         "description": "Retrieve a list of all available quotes"
@@ -31,13 +31,7 @@ export function RegisterCommands(top10Commands: StringCommand[]) {
         "description": "throw in a random quote"
     },
     ]
-    const jsonData = {
-        "name": "clippy",
-        "type": 1,
-        "description": "Your friendly quote machine",
-        "options": [...top10Commands, ...defaultCommands]
-    }
-    const jsonData2 = {
+    const baseQuoteCommand = [{
         "name": "c",
         "type": 1,
         "description": "Your friendly quote machine",
@@ -47,10 +41,18 @@ export function RegisterCommands(top10Commands: StringCommand[]) {
             "type": 3,
             "description": "Use from commandlist"
         }]
-    }
+    }]
+    
+    const jsonData = [{
+        "name": "clippy",
+        "type": 1,
+        "description": "Your friendly quote machine",
+        "options": [...top10Commands, ...nonQuoteCommands]
+    }]
+    const allCommandsCollected = [...jsonData, ...baseQuoteCommand]
 
     if (DEPLOY_COMMANDS == "indeed") {
-        dropSteveCommands(jsonData);
+        dropSteveCommands(allCommandsCollected);
     }
 
 }
