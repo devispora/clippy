@@ -25,6 +25,10 @@ export function RegisterCommands(top10Commands: StringCommand[]) {
         "name": "listquotes",
         "type": 1,
         "description": "Retrieve a list of all available quotes"
+    },{
+        "name": "random",
+        "type": 1,
+        "description": "throw in a random quote"
     },
     ]
     const jsonData = {
@@ -46,7 +50,7 @@ export function RegisterCommands(top10Commands: StringCommand[]) {
     }
 
     if (DEPLOY_COMMANDS == "indeed") {
-        dropSteveCommands(jsonData2);
+        dropSteveCommands(jsonData);
     }
 
 }
