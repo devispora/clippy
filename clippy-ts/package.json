@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "read-commands": "ts-node-esm register-commands.ts",
+    "read-commands": "ts-node-esm ./src/command-registration.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

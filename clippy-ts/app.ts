@@ -1,6 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
 import nacl from 'tweetnacl';
+import { IncomingInteraction } from './src/command-model.ts';
+import { processCommand } from './src/command-processing.ts';
 
 /**
  *
@@ -13,11 +15,6 @@ import nacl from 'tweetnacl';
  */
 
 
-interface IncomingInteraction {
-    id: string;
-    type: InteractionType;
-    name: string;
-}
 
 const publicKey = process.env.PUBLIC_DISCORD_KEY;
 
@@ -36,7 +33,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent) => {
             if (isVerified) {
 
                 try {
-                    let incomingCommand: IncomingInteraction = JSON.parse(event.body);
+                    const incomingCommand: IncomingInteraction = JSON.parse(event.body);
                     if (incomingCommand.type == InteractionType.PING) {
                         console.log('good ping flow');
                         return {
@@ -44,13 +41,13 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent) => {
                             body: JSON.stringify({ "type": InteractionResponseType.PONG }),
                         }
                     }
-
+                    const desiredResponse = processCommand(incomingCommand)
                     return {
                         statusCode: 200,
                         body: JSON.stringify({
                             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                             data: {
-                                content: 'Hi there yoss',
+                                content: `${desiredResponse}`,
                             }
                         }),
                     };
