@@ -1,9 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
-
 import { IncomingInteraction } from './src/command-model.ts';
 import { processCommand } from './src/command-processing.ts';
-import { performNaclVerification } from './src/command-verification.ts';
+import { InteractionResponseType, InteractionType } from './src/types-copied/interaction-types.ts';
+import { performDVerification } from './src/verification/dverify-verification.ts';
 
 /**
  *
@@ -23,7 +22,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent) => {
         const signature = event.headers['x-signature-ed25519']
         const timestamp = event.headers['x-signature-timestamp']
         if (signature && timestamp && publicKey) {
-            if (performNaclVerification(publicKey, signature, timestamp, event.body)) {
+            if (await performDVerification(publicKey, signature, timestamp, event.body)) {
                 try {
                     const incomingCommand: IncomingInteraction = JSON.parse(event.body);
                     if (incomingCommand.type == InteractionType.PING) {
