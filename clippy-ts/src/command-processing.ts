@@ -1,6 +1,6 @@
-import { InteractionType } from "discord-interactions";
 import { ReadCommandsFromFile } from "./command-loader.ts";
 import { IncomingInteraction } from "./command-model.ts";
+import { InteractionType } from "./types-copied/interaction-types.ts";
 
 const allCommandsRead = ReadCommandsFromFile();
 const allCommandNames = [...allCommandsRead.keys()];

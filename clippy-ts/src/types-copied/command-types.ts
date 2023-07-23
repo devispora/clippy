@@ -1,4 +1,4 @@
-import { InteractionType } from "./types-copied/interaction-types.ts";
+import { InteractionType } from "./interaction-types.ts";
 
 export interface StringCommand{    
     name: string,
